@@ -4,7 +4,8 @@
   "description": "project to build the server and the database",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/saraaltayeh/Movies-Library/issues"
   },
-  "homepage": "https://github.com/saraaltayeh/Movies-Library#readme"
+  "homepage": "https://github.com/saraaltayeh/Movies-Library#readme",
+  "dependencies": {
+    "express": "^4.18.0"
+  }
 }
