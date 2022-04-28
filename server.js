@@ -1,14 +1,19 @@
 const express = require("express");
+const movieData = require("./movie data/data.json");
 
 const app = express();
 const port = 4001
 
 app.get("/", handleFirstRoute);
 app.get("/favorite", handleFavoritePage);
+// app.use("*", handleNotFound);
 
 function handleFirstRoute(req, res) {
-const movie = Movies("Spider-Man: No Way Home","/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg","Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes of being a super-hero. When he asks for help from Doctor Strange the stakes become even more dangerous, forcing him to discover what it truly means to be Spider-Man.");
-    return res.json({title:movie.title, poster_path:movie.poster_path, overview:movie.overview});
+    let result = [];
+    movieData.da
+    let newMovie = new Movies(movieData.title, movieData.poster_path, movieData.overview);
+    result.push(newMovie);
+    return res.json(result);
 }
 
 function handleFavoritePage(req, res) {
