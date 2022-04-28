@@ -3,7 +3,7 @@
 **Author Name**: sara altayeh
 
 ## WRRC
-![wwrc](./assets/WRRC.png)
+![wwrc](./assets/wrrc2.png)
 
 ## Overview
 start build server for Movie project.
