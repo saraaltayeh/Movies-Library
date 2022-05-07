@@ -52,15 +52,36 @@ function handleSearch(req, res) {
         })
         .catch(error => {
             console.log(error);
+            res.send("inside error");
         })
 }
 
 function handleDiscover(req, res) {
-    return res.json("Welcome to Discover Page");
+    let movieName = req.query.movieName;
+    const url = `https://api.themoviedb.org/3/discover/movie?api_key=668baa4bb128a32b82fe0c15b21dd699&language=en-US&query=${movieName}&api_key=cce39446a39226ab073a48bb78ed07cd`
+
+    axios.get(url)
+        .then(info => {
+            res.json(info.data.results);
+        })
+        .catch(error => {
+            console.log(error);
+            res.send("inside error");
+        })
 }
 
 function handleChanges(req, res) {
-    return res.send("Welcome to Changes Page");
+    let movieName = req.query.movieName;
+    const url = `https://api.themoviedb.org/3/movie/changes?api_key=668baa4bb128a32b82fe0c15b21dd699&language=en-US&query=${movieName}&api_key=cce39446a39226ab073a48bb78ed07cd`
+
+    axios.get(url)
+        .then(info => {
+            res.json(info.data.results);
+        })
+        .catch(error => {
+            console.log(error);
+            res.send("inside error");
+        })
 }
 
 app.use(function (err, req, res) {
