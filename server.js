@@ -78,16 +78,15 @@ function handleChanges(req, res) {
 function handleAdd(req, res) {
     console.log(req.body);
 
-    const {title, id, overview, image} = req.body;
+    const {title, id, overview} = req.body;
 
-    let sql ='INSERT INTO movie(title, id, overview, image) VALUES($1,$2,$3,$4);';
-    let values = [title, id, overview, image];
+    let sql ='INSERT INTO movie(title, id, overview) VALUES($1,$2,$3) RETURNING *;';
+    let values = [title, id, overview];
     client.query(sql, values).then((result)=> {
-        console.log(result.rows);
-        return res.status(258).send("data was successfully")
+        console.log(result);
+        return res.json(result.rows[1]);
     }).catch();
 
-    res.send("adding db in progress");
 }
 
 function handleGet(req, res) {
@@ -95,15 +94,16 @@ function handleGet(req, res) {
 
     client.query(sql).then((result)=> {
         console.log(result);
-        return res.json(result.rows);
-    }).catch();
+        return res.json(result);
+    }).catch(
+        res.status(500).send("error")
+    );
 }
 
 app.use(function (err, req, res) {
     console.log(err.stack);
     res.type('text/plain');
-    res.status(500);
-    res.send('Sorry, something went wrong');
+    res.status(500).send("error");
 });
 
 app.use(function (req, res) {
