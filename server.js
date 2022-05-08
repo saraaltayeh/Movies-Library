@@ -11,8 +11,9 @@ const movieData = require("./movie data/data.json");
 const {Client} = require("pg")
 const client = new Client(url)
 
+const port = process.env.port || 4001;
 const app = express();
-const port = 4001
+
 app.use(cors());
 app.use(bodyParser.urlencoded({extended :false}));
 app.use(bodyParser.json());
@@ -25,6 +26,10 @@ app.get("/discover", handleDiscover);
 app.get("/changes", handleChanges);
 app.post("/addMovie",handleAdd);
 app.get("/getMovies", handleGet);
+app.put("/UPDATE/id", handleUpdate);
+app.delete("/DELETE/id", handleDelete);
+app.get("/getMovie/id", handleID);
+
 
 function handleFirstRoute(req, res) {
     let result = [];
@@ -99,6 +104,40 @@ function handleGet(req, res) {
         res.status(500).send("error")
     );
 }
+
+function handleUpdate(req, res){
+    const {title, id, overview} = req.body;
+
+    let sql ='UPDATE movie SET title=$55,id=$44,overview=$22 WHERE id=1';
+    let values = [title, id, overview];
+    client.query(sql, values).then((result)=> {
+        console.log(result);
+        return res.status(301).json(result);
+    }).catch();
+}
+
+function handleDelete(req, res){
+    const {title, id, overview} = req.body;
+
+    let sql ='DELETE FROM movie(title, id, overview)';
+    let values = [title, id, overview];
+    client.query(sql, values).then((result)=> {
+        console.log(result);
+        return res.status(301).json(result.rows[0]);
+    }).catch();
+}
+
+function handleID(req, res){
+    let sql = "SELECT * from movie";
+
+    client.query(sql).then((result)=> {
+        console.log(result);
+        return res.json(result);
+    }).catch(
+        res.status(500).send("error")
+    );
+}
+
 
 app.use(function (err, req, res) {
     console.log(err.stack);
