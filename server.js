@@ -1,11 +1,21 @@
+const url = "postgress://saraaltayeh:sara791997$$@localhost:5432/movies";
+
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios").default;
+const bodyParser = require("body-parser");
+require('dotenv').config();
+
 const movieData = require("./movie data/data.json");
+
+const {Client} = require("pg")
+const client = new.Client(url)
 
 const app = express();
 const port = 4001
 app.use(cors());
+app.use(bodyParser.urlencoded({extended :false}));
+app.use(bodyParser.json());
 
 app.get("/", handleFirstRoute);
 app.get("/favorite", handleFavoritePage);
@@ -13,6 +23,8 @@ app.get("/trending", handleTrending);
 app.get("/search", handleSearch);
 app.get("/discover", handleDiscover);
 app.get("/changes", handleChanges);
+app.post("/addMovie",handleAdd);
+app.get("/getMovies", handleGet);
 
 function handleFirstRoute(req, res) {
     let result = [];
@@ -63,6 +75,25 @@ function handleChanges(req, res) {
     return res.send("Welcome to Changes Page");
 }
 
+function handleAdd(req, res) {
+    console.log(req.body);
+
+    const {title, id, overview, image} = req.body;
+
+    let sql ='INSERT INTO movie(title, id, overview, image) VALUES($1,$2,$3,$4);';
+    let values = [title, id, overview, image];
+    client.query(sql, values).then(()=> {
+        console.log(result);
+        return res.send("data was successfully")
+    }).catch();
+
+     res.send("adding db in progress");
+}
+
+function handleGet(req, res) {
+    res.send("");
+}
+
 app.use(function (err, req, res) {
     console.log(err.stack);
     res.type('text/plain');
@@ -76,9 +107,13 @@ app.use(function (req, res) {
     res.send('404 Not Found');
 });
 
-app.listen(port, () => {
-    console.log(`app listening on port ${port}`);
+client.connect().then(() => {
+
+    app.listen(port, () => {
+        console.log(`app listening on port ${port}`);
+    })
 })
+
 
 function Movies(id, title, release_date, poster_path, overview) {
     this.id = id;
