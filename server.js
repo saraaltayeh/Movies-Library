@@ -9,7 +9,7 @@ require('dotenv').config();
 const movieData = require("./movie data/data.json");
 
 const {Client} = require("pg")
-const client = new.Client(url)
+const client = new Client(url)
 
 const app = express();
 const port = 4001
@@ -82,16 +82,21 @@ function handleAdd(req, res) {
 
     let sql ='INSERT INTO movie(title, id, overview, image) VALUES($1,$2,$3,$4);';
     let values = [title, id, overview, image];
-    client.query(sql, values).then(()=> {
-        console.log(result);
-        return res.send("data was successfully")
+    client.query(sql, values).then((result)=> {
+        console.log(result.rows);
+        return res.status(258).send("data was successfully")
     }).catch();
 
-     res.send("adding db in progress");
+    res.send("adding db in progress");
 }
 
 function handleGet(req, res) {
-    res.send("");
+    let sql = "SELECT * from movie";
+
+    client.query(sql).then((result)=> {
+        console.log(result);
+        return res.json(result.rows);
+    }).catch();
 }
 
 app.use(function (err, req, res) {
@@ -113,7 +118,6 @@ client.connect().then(() => {
         console.log(`app listening on port ${port}`);
     })
 })
-
 
 function Movies(id, title, release_date, poster_path, overview) {
     this.id = id;
