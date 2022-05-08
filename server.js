@@ -9,7 +9,7 @@ require('dotenv').config();
 const movieData = require("./movie data/data.json");
 
 const {Client} = require("pg")
-const client = new.Client(url)
+const client = new Client(url)
 
 const app = express();
 const port = 4001
@@ -91,7 +91,12 @@ function handleAdd(req, res) {
 }
 
 function handleGet(req, res) {
-    res.send("");
+    let sql = "SELECT * from movie";
+
+    client.query(sql).then((result)=> {
+        console.log(result);
+        return res.json(result.rows);
+    }).catch();
 }
 
 app.use(function (err, req, res) {
