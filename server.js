@@ -106,10 +106,11 @@ function handleGet(req, res) {
 }
 
 function handleUpdate(req, res){
+    const {movieName} = req.query;
     const {title, id, overview} = req.body;
 
-    let sql ='UPDATE movie SET title=$55,id=$44,overview=$22 WHERE id=1';
-    let values = [title, id, overview];
+    let sql ='UPDATE movie SET title=$1, id=$1, overview=$1 WHERE title=1$ ;';
+    let values = [title, id, overview,movieName];
     client.query(sql, values).then((result)=> {
         console.log(result);
         return res.status(301).json(result);
@@ -117,10 +118,10 @@ function handleUpdate(req, res){
 }
 
 function handleDelete(req, res){
-    const {title, id, overview} = req.body;
+    const {movieName} = req.query;
 
-    let sql ='DELETE FROM movie(title, id, overview)';
-    let values = [title, id, overview];
+    let sql ='DELETE FROM movie WHERE title=1$;';
+    let values = [movieName];
     client.query(sql, values).then((result)=> {
         console.log(result);
         return res.status(301).json(result.rows[0]);
@@ -128,9 +129,9 @@ function handleDelete(req, res){
 }
 
 function handleID(req, res){
-    let sql = "SELECT * from movie";
-
-    client.query(sql).then((result)=> {
+    let sql = "SELECT * from movie WHERE id=1$";
+    let values =[req.params.id];
+    client.query(sql,values).then((result)=> {
         console.log(result);
         return res.json(result);
     }).catch(
