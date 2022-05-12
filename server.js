@@ -9,9 +9,14 @@ require('dotenv').config();
 const movieData = require("./movie data/data.json");
 
 const {Client} = require("pg")
-const client = new Client(url)
+// const client = new Client(url)
 
-const port = process.env.port || 4001;
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+ });
+
+const port = 4001;
 const app = express();
 
 app.use(cors());
@@ -28,7 +33,7 @@ app.post("/addMovie",handleAdd);
 app.get("/getMovies", handleGet);
 app.put("/UPDATE/id", handleUpdate);
 app.delete("/DELETE/id", handleDelete);
-app.get("/getMovie/id", handleID);
+app.get("/getMovie/:id", handleID);
 
 
 function handleFirstRoute(req, res) {
