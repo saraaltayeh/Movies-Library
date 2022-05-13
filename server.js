@@ -1,10 +1,11 @@
+require('dotenv').config();
 const url = "postgress://saraaltayeh:sara791997$$@localhost:5432/movies";
 
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios").default;
 const bodyParser = require("body-parser");
-require('dotenv').config();
+
 
 const movieData = require("./movie data/data.json");
 
@@ -16,7 +17,7 @@ const client = new Client({
     ssl: { rejectUnauthorized: false }
  });
 
-const port = 4001;
+const port = process.env.PORT;
 const app = express();
 
 app.use(cors());
